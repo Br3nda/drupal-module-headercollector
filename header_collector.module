@@ -15,9 +15,18 @@ function header_collector_page() {
                   );
   $result = pager_query("SELECT * FROM {visitor}". tablesort_sql($headers));
   while ($row = db_fetch_object($result)) {
-    $rows[] = array($row->ua);
+    $headers = header_collector_get_list($row->vid);
+    $rows[] = array($row->ua, theme('item_list', $headers));
   }
   $output = theme('table', $headers, $rows);
   $output .= theme('pager', null, 100, 0);
   return  $output;
+}
+
+function header_collector_get_list($vid) {
+  $result = db_query("SELECT * FROM {visitor_headers} WHERE vid=%d", $vid);
+  while ($row = db_fetch_object($result)) {
+    $headers[] = t('!name = !value', array('!name' => $row->header_name, '!value' => $row->header_value));
+  }
+  return $headers;
 }
