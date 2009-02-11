@@ -1,0 +1,30 @@
+<?php
+function header_collector_install() {
+  drupal_install_schema('header_collector');
+}
+function header_collector_schema() {
+  $schema['visitor'] = array(
+
+   'fields' => array(
+          'vid' => array('type' => 'int'),
+          'ua' =>  array('type' => 'text'),
+          'visited' => array('type' => 'int'),
+	  'mdl_content_type' => array('type' => 'text'),
+	
+          ),
+    'primary key' => array('vid'),
+                           );
+  $schema['visitor_headers'] = array(
+    'fields' => array(
+          'vid' => array('type' => 'int'),
+          'header_name' => array('type' => 'text'),
+          'header_value' => array('type' => 'text'),
+          )
+        );
+  return $schema;
+}
+
+function header_collector_uninstall() {
+  drupal_uninstall_schema('header_collector');
+}
+

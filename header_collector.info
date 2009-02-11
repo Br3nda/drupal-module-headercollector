@@ -1,0 +1,5 @@
+name = HeaderCollector
+description = Collects heade information for profiling mobile handsets
+core = 6.x
+
+

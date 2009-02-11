@@ -1,0 +1,23 @@
+<?php
+function header_collector_menu() {
+  $menu['headercollector'] = array(
+                                    'title' => 'Collected Headers',
+                                    'description' => 'handy',
+                                    'page callback' => 'header_collector_page',
+                                    'access arguments' => array('View collected headers'),
+                                   );
+  return $menu;
+}
+
+function header_collector_page() {
+  $headers = array(
+                   array('field' => 'ua', 'data' => 'User Agent', 'sort' => 'asc'),
+                  );
+  $result = pager_query("SELECT * FROM {visitor}". tablesort_sql($headers));
+  while ($row = db_fetch_object($result)) {
+    $rows[] = array($row->ua);
+  }
+  $output = theme('table', $headers, $rows);
+  $output .= theme('pager', null, 100, 0);
+  return  $output;
+}
