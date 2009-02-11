@@ -6,6 +6,7 @@ function header_collector_menu() {
                                     'page callback' => 'header_collector_page',
                                     'access arguments' => array('View collected headers'),
                                    );
+  $menu['headercollector/edit'] = array('page callback' => 'drupal_get_form', 'page_arguments' => array('header_collector_edit'));
   return $menu;
 }
 
@@ -13,13 +14,14 @@ function header_collector_page() {
   $headers = array(
                    array('field' => 'visited', 'data' => 'Time of visit', 'sort' => 'desc'),
                    array('field' => 'ua', 'data' => 'User Agent'),
+                     'MDL',
                    'http headers',
-                          
+                   'notes',
                   );
   $result = pager_query("SELECT * FROM {visitor}". tablesort_sql($headers));
   while ($row = db_fetch_object($result)) {
     $http = header_collector_get_list($row->vid);
-    $rows[] = array(format_date($row->visited), $row->ua, theme('item_list', $http));
+    $rows[] = array(format_date($row->visited), $row->ua, $row->mdl_content_type, theme('item_list', $http));
   }
   $output = theme('table', $headers, $rows);
   $output .= theme('pager', null, 100, 0);
@@ -32,4 +34,8 @@ function header_collector_get_list($vid) {
     $headers[] = t('!name = !value', array('!name' => $row->header_name, '!value' => $row->header_value));
   }
   return $headers;
+}
+
+function header_collector_edit($vid) {
+  
 }
