@@ -15,8 +15,8 @@ function header_collector_page() {
                   );
   $result = pager_query("SELECT * FROM {visitor}". tablesort_sql($headers));
   while ($row = db_fetch_object($result)) {
-    $headers = header_collector_get_list($row->vid);
-    $rows[] = array($row->ua, theme('item_list', $headers));
+    $http = header_collector_get_list($row->vid);
+    $rows[] = array($row->ua, theme('item_list', $http));
   }
   $output = theme('table', $headers, $rows);
   $output .= theme('pager', null, 100, 0);
