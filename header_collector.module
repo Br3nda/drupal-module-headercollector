@@ -1,14 +1,31 @@
 <?php
 function header_collector_menu() {
   $menu['headercollector'] = array(
-                                    'title' => 'Collected Headers',
+                                    'title' => 'All Collected Headers',
                                     'description' => 'handy',
                                     'page callback' => 'header_collector_page',
+                                    'access arguments' => array('View collected headers'),
+                                   );
+  $menu['useragents'] = array(
+                                    'title' => 'User Agents',
+                                    'description' => 'handy',
+                                    'page callback' => 'header_collector_ua_page',
                                     'access arguments' => array('View collected headers'),
                                    );
 
   $menu['headercollector/edit'] = array('page callback' => 'drupal_get_form', 'page_arguments' => array('header_collector_edit_form'));
   return $menu;
+}
+
+function header_collector_ua_page() {
+  $headers = array('UA');
+  $result = db_query("SELECT distinct header_value as hv FROM {visitor_headers} WHERE lower(header_name) = 'user-agent'");
+  if (!$result) return 'No UAs logged';
+  while ($row = db_fetch_object($result)) {
+    $rows[] = array($row->hv);
+  }
+  return theme('table', $headers, $rows);
+
 }
 
 function header_collector_page($vid=null) {
